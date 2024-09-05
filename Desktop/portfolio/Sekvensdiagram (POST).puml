@@ -1,0 +1,16 @@
+@startuml
+actor User
+participant "Browser" as B
+participant "Frontend" as F
+participant "Backend" as BE
+participant "Database/JSON file" as DB
+
+User -> B: Fill form and click "Add Project"
+B -> F: Send form data to Frontend
+F -> BE: POST /api/add with form data
+BE -> BE: Validate project data
+BE -> DB: Save project to data.json
+DB -> BE: Confirm save
+BE -> F: Response with status 201 (Created)
+F -> B: Display success message and update project list
+@enduml
