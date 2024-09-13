@@ -1,17 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './styles/main.css';
 
-
 const App: React.FC = () => {
-  const [projects, setProjects] = useState<{ title: string; description: string }[]>([]);
+  const [projects, setProjects] = useState<{ id: string; title: string; description: string }[]>([]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
-  const handleAddProject = () => {
+  // Hent prosjekter fra backend
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch('http://localhost:3999/projects');
+        const data = await response.json();
+        setProjects(data);
+      } catch (error) {
+        console.error("Failed to fetch projects:", error);
+      }
+    };
+
+    fetchProjects();
+  }, []); // Kjøres kun én gang når komponenten monteres
+
+  // Legg til nytt prosjekt
+  const handleAddProject = async () => {
     if (title && description) {
-      setProjects([...projects, { title, description }]);
-      setTitle('');
-      setDescription('');
+      const newProject = { title, description };
+
+      try {
+        const response = await fetch('http://localhost:3999/projects', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newProject),
+        });
+
+        if (response.ok) {
+          const addedProject = await response.json();
+          setProjects([...projects, addedProject]); // Oppdater prosjektlisten i state
+          setTitle(''); // Nullstill inputfelt
+          setDescription('');
+        } else {
+          console.error("Failed to add project");
+        }
+      } catch (error) {
+        console.error("Error adding project:", error);
+      }
     }
   };
 
@@ -37,7 +71,6 @@ const App: React.FC = () => {
       <section className="contact">
         <h2 className="title">Kontakt</h2>
         <button onClick={() => alert('Ahmad.alkh@hiof.no')}>Show Email</button>
-       
       </section>
 
       <section className="projects">
