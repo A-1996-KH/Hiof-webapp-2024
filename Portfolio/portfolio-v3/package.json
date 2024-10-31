@@ -1,0 +1,27 @@
+{
+	"name": "dag3",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"type": "module",
+	"scripts": {
+		"clean": "rm -rf **/dist **/build **/node_modules **/package-lock.json **/pnpm-lock.yaml ./node_modules ./package-lock.json ./pnpm-lock.yaml",
+		"dev": "concurrently -n ,frontend-react,server -c green,blue,yellow  \"cd frontend-react && pnpm run dev\" \"cd backend && pnpm run dev\""
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"@types/node": "^22.8.5",
+		"concurrently": "8.2.2",
+		"ts-node": "^10.9.2",
+		"zx": "^8.1.5"
+	},
+	"dependencies": {
+		"@t3-oss/env-core": "^0.11.1",
+		"better-sqlite3": "^11.5.0",
+		"hono": "^4.6.8",
+		"js-cookie": "^3.0.5",
+		"zod": "^3.23.8"
+	}
+}
